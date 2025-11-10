@@ -1,13 +1,313 @@
 # Cloudera Inference With CursorAI
 
-RAG framework for Cloudera-hosted embedding models with controlled model access for enterprise security. Enables secure AI agent development using Cursor AI with Cloudera-hosted inference endpoints.
+A comprehensive RAG (Retrieval Augmented Generation) framework for Cloudera-hosted AI models with enterprise-grade security. Enables secure AI agent development using Cloudera-hosted embedding and LLM endpoints, with seamless integration into Cursor IDE's agent window.
 
-## Overview
+## Key Features
+
+- 🔍 **RAG Framework**: Complete Retrieval Augmented Generation system with semantic search
+- 🤖 **Embedding Models**: Cloudera-hosted embedding endpoints for document search and similarity matching
+- 💬 **LLM Integration**: Cloudera-hosted language models for text generation and chat completions
+- 🎯 **Cursor IDE Integration**: Configure Cursor's agent window to use your Cloudera LLM models
+- 🔒 **Enterprise Security**: Controlled model access with data sovereignty within Cloudera infrastructure
+- 🔌 **OpenAI-Compatible API**: Uses standard OpenAI client library with custom Cloudera endpoints
+- ⚙️ **Flexible Configuration**: Support for `config.json`, `config-llm.json`, and environment variables
+- 📦 **SimpleVectorStore**: Built-in in-memory vector store for RAG applications
+- 🧪 **Comprehensive Testing**: Full test suite with mocks and integration tests
+
+## 🚀 Quick Start Guide
+
+**Get up and running in 5 minutes!**
+
+### Prerequisites
+
+Before you begin, make sure you have:
+
+- ✅ **Python 3.8+** installed
+- ✅ **Cloudera AI Platform** access
+- ✅ **Cloudera endpoint URLs** (for embeddings and/or LLM)
+- ✅ **API key (JWT token)** from Cloudera
+- ✅ **Cursor IDE** installed (optional, for agent window integration)
+
+### Step 1: Installation
+
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd Cloudera-Inference-With-CusorAI
+
+# 2. Create virtual environment
+python3 -m venv venv
+
+# 3. Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+# venv\Scripts\activate
+
+# 4. Install dependencies
+pip install -r requirements.txt
+```
+
+### Step 2: Configure Embedding Endpoints (Required for RAG)
+
+**For embeddings (document search, RAG retrieval):**
+
+```bash
+# 1. Copy example configuration
+cp config.json.example config.json
+
+# 2. Edit config.json with your Cloudera endpoint details
+```
+
+Edit `config.json` with your values:
+
+```json
+{
+  "endpoint": {
+    "base_url": "https://your-endpoint.com/namespaces/serving-default/endpoints/your-embedding-endpoint/v1"
+  },
+  "models": {
+    "query_model": "nvidia/nv-embedqa-e5-v5-query",
+    "passage_model": "nvidia/nv-embedqa-e5-v5-passage"
+  },
+  "api_key": "your-api-key-here",
+  "embedding_dim": 1024
+}
+```
+
+**How to find your endpoint details:**
+
+1. Log into **Cloudera AI Platform**
+2. Navigate to **Deployments** → **Model Endpoints**
+3. Select your embedding endpoint
+4. Copy the **ENDPOINT BASE URL** (full URL ending in `/v1`)
+5. Copy the **MODEL ID** and add `-query` or `-passage` suffix
+
+### Step 3: Configure LLM Endpoints (Optional, for Agent Window)
+
+**For LLM (text generation, Cursor's agent window):**
+
+```bash
+# 1. Copy example LLM configuration
+cp config-llm.json.example config-llm.json
+
+# 2. Edit config-llm.json with your Cloudera LLM endpoint details
+```
+
+Edit `config-llm.json` with your values:
+
+```json
+{
+  "llm_endpoint": {
+    "base_url": "https://your-endpoint.com/namespaces/serving-default/endpoints/your-llm-endpoint/v1",
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "api_key": "your-api-key-here"
+}
+```
+
+**Note:** You can also add `llm_endpoint` to your `config.json` instead of using a separate file.
+
+### Step 4: Verify Configuration
+
+```bash
+# Test your configuration
+source venv/bin/activate
+python3 -c "from agents import create_cloudera_agent; agent = create_cloudera_agent(); print('✅ Configuration OK!')"
+```
+
+If you see `✅ Configuration OK!`, your configuration is correct!
+
+### Step 5: Set Up Cursor's Agent Window (Optional)
+
+**To use Cloudera LLM in Cursor's agent window:**
+
+```bash
+# 1. Generate workspace file with Cloudera settings
+python3 scripts/create_cursor_workspace.py
+
+# 2. Open workspace in Cursor
+# File → Open Workspace from File... → ModelTesting.code-workspace
+# Or double-click ModelTesting.code-workspace
+```
+
+#### Alternative: Manual Configuration
+
+1. Open Cursor Settings: `Cmd+,` (Mac) or `Ctrl+,` (Windows/Linux)
+2. Go to: **Settings → Features → AI**
+3. Disable: OpenAI, Anthropic, and other providers
+4. Enable: "Custom OpenAI-compatible endpoint"
+5. Configure:
+   - **Base URL**: Your Cloudera LLM endpoint URL (from `config-llm.json`)
+   - **API Key**: Your Cloudera API key
+   - **Model**: Your LLM model ID (e.g., `nvidia/llama-3.3-nemotron-super-49b-v1`)
+6. Save and restart Cursor
+
+### Step 6: Test Everything
+
+**Test embeddings (RAG):**
+
+```bash
+python3 examples/example_agent_usage.py
+```
+
+**Test LLM:**
+
+```bash
+python3 examples/example_llm_usage.py
+```
+
+**Test Cursor agent window:**
+
+1. Open Cursor's agent window: `Cmd+L` (Mac) or `Ctrl+L` (Windows/Linux)
+2. Ask a question: "What is Python?"
+3. Verify it uses your Cloudera LLM
+
+#### Example: Using the Cursor Agent Window
+
+Here are examples of the Cursor agent window in action with Cloudera LLM:
+
+![Cursor Agent Window Example 1](images/CusorAgentWindow.png)
+
+![Cursor Agent Window Example 2](images/CusorAgentWindow1.png)
+
+### ✅ Quick Checklist
+
+- [ ] Python 3.8+ installed
+- [ ] Virtual environment created and activated
+- [ ] Dependencies installed (`pip install -r requirements.txt`)
+- [ ] `config.json` created and configured (for embeddings)
+- [ ] `config-llm.json` created and configured (for LLM/agent window)
+- [ ] Configuration test passes
+- [ ] Cursor workspace configured (if using agent window)
+- [ ] Examples run successfully
+
+### 🆘 Troubleshooting
+
+#### ModuleNotFoundError: No module named 'openai'
+
+- ✅ Make sure virtual environment is activated: `source venv/bin/activate`
+- ✅ Install dependencies: `pip install -r requirements.txt`
+
+#### Error: endpoint.base_url not found
+
+- ✅ Check `config.json` exists and has correct structure
+- ✅ Verify `endpoint.base_url` is set (not `endpoint.base_endpoint`)
+
+#### 401 Token has expired
+
+- ✅ Your API key (JWT token) has expired
+- ✅ Get a new API key from Cloudera AI Platform
+- ✅ Update `api_key` in `config.json` and/or `config-llm.json`
+
+#### 404 Not Found
+
+- ✅ Check endpoint URL is correct (should end in `/v1`)
+- ✅ Verify endpoint name matches your Cloudera deployment
+- ✅ Ensure endpoint is active in Cloudera AI Platform
+
+#### Cursor agent window not using Cloudera LLM
+
+- ✅ Verify workspace file is open: `ModelTesting.code-workspace`
+- ✅ Check Cursor settings: Settings → Features → AI
+- ✅ Disable other providers (OpenAI, Anthropic)
+- ✅ Restart Cursor after configuration changes
+
+#### Need more help?
+
+- 📖 See [CURSOR_QUICK_START.md](CURSOR_QUICK_START.md) for detailed Cursor setup
+- 📖 See [docs/CURSOR_INTEGRATION_GUIDE.md](docs/CURSOR_INTEGRATION_GUIDE.md) for advanced integration
+- 📖 See [examples/](examples/) for code examples
+- 📖 See [docs/DEVELOPER_RECOMMENDATIONS.md](docs/DEVELOPER_RECOMMENDATIONS.md) for best practices
+
+### 📝 Configuration Examples
+
+#### Complete config.json example
+
+```json
+{
+  "endpoint": {
+    "base_url": "https://ml-64288d82-5dd.go01-dem.ylcu-atmi.cloudera.site/namespaces/serving-default/endpoints/goes---e5-embedding/v1"
+  },
+  "models": {
+    "query_model": "nvidia/nv-embedqa-e5-v5-query",
+    "passage_model": "nvidia/nv-embedqa-e5-v5-passage"
+  },
+  "llm_endpoint": {
+    "base_url": "https://ml-64288d82-5dd.go01-dem.ylcu-atmi.cloudera.site/namespaces/serving-default/endpoints/goes---nemotron-49b-throughput-l40s/v1",
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "api_key": "your-api-key-here",
+  "embedding_dim": 1024
+}
+```
+
+#### Complete config-llm.json example
+
+```json
+{
+  "llm_endpoint": {
+    "base_url": "https://ml-64288d82-5dd.go01-dem.ylcu-atmi.cloudera.site/namespaces/serving-default/endpoints/goes---nemotron-49b-throughput-l40s/v1",
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "api_key": "your-api-key-here"
+}
+```
+
+### 🔍 Verification Commands
+
+#### Test configuration
+
+```bash
+# Test agent creation
+python3 -c "from agents import create_cloudera_agent; agent = create_cloudera_agent(); print('✅ OK!')"
+
+# Test LLM connection
+python3 -c "from agents import create_cloudera_agent; agent = create_cloudera_agent(); result = agent.answer_with_llm('What is Python?', use_context=False); print(result['answer'])"
+
+# Test embeddings
+python3 -c "from agents import create_cloudera_agent; agent = create_cloudera_agent(); agent.add_knowledge(['Python is a language']); result = agent.answer_with_context('What is Python?'); print(result['context_text'])"
+```
+
+#### Check configuration files
+
+```bash
+# Verify config.json exists
+ls -la config.json
+
+# Verify config-llm.json exists
+ls -la config-llm.json
+
+# Check if files are in .gitignore
+git check-ignore config.json config-llm.json
+```
+
+---
+
+## What This Project Does
+
+This framework provides a complete solution for building RAG applications using Cloudera-hosted AI models:
+
+1. **Semantic Search**: Use Cloudera embedding models to search your knowledge base by meaning, not just keywords
+2. **Text Generation**: Use Cloudera LLM models to generate answers, write content, and have conversations
+3. **RAG Applications**: Combine retrieval (embeddings) with generation (LLMs) for intelligent question-answering
+4. **Cursor IDE Integration**: Configure Cursor's agent window to use your Cloudera LLM for code assistance and chat
+
+### Use Cases
+
+- **Document Q&A**: Ask questions about your documentation and get accurate answers
+- **Code Search**: Find relevant code examples and patterns in your codebase
+- **Knowledge Base**: Build searchable knowledge bases from your internal documents
+- **Developer Assistance**: Use Cloudera LLM in Cursor IDE for code generation and assistance
+- **RAG Applications**: Build complete RAG systems that retrieve context and generate answers
+
+## Project Overview
 
 - **Model Control**: Enforces use of approved Cloudera-hosted models only
-- **Data Sovereignty**: All embeddings processed within Cloudera infrastructure
-- **OpenAI-compatible API**: Uses OpenAI client library with custom endpoint
-- **Configuration**: Environment variables or `config.json` (dev)
+- **Data Sovereignty**: All AI operations processed within Cloudera infrastructure
+- **OpenAI-Compatible API**: Uses standard OpenAI client library with custom Cloudera endpoints
+- **Flexible Configuration**: Support for `config.json`, `config-llm.json`, and environment variables
+- **Enterprise Ready**: Built with security, error handling, and production best practices
 
 ## Understanding Embeddings vs. LLM Endpoints
 
@@ -451,7 +751,21 @@ print(response.choices[0].message.content)
 
 **How to Use Cloudera Agents in Cursor AI**
 
+> 📖 **For detailed step-by-step instructions, see [CURSOR_INTEGRATION_GUIDE.md](docs/CURSOR_INTEGRATION_GUIDE.md)**
+
 This framework enables you to use Cloudera-hosted embedding models within Cursor AI IDE, ensuring all AI operations use your approved enterprise models.
+
+**Quick Setup:**
+```bash
+# 1. Configure your project
+cp config.json.example config.json
+# Edit config.json with your Cloudera endpoint details
+
+# 2. Use the helper script to configure Cursor
+python3 scripts/configure_cursor.py
+
+# 3. Restart Cursor and start using Cloudera agents!
+```
 
 #### Step 1: Configure Cursor AI Settings
 
@@ -487,6 +801,14 @@ After configuration, verify Cursor is using your Cloudera endpoint:
 4. Verify the model being used matches your configuration
 
 ![Validate Model Being Used](images/ValidateModelBeingUsed.png)
+
+#### Example: Cursor Agent Window in Action
+
+Here are examples of using the Cursor agent window with your Cloudera LLM:
+
+![Cursor Agent Window Example 1](images/CusorAgentWindow.png)
+
+![Cursor Agent Window Example 2](images/CusorAgentWindow1.png)
 
 #### Step 3: Use Cloudera Agents in Your Code
 
