@@ -1,0 +1,8 @@
+{
+  "llm_endpoint": {
+    "base_url": "https://your-endpoint.com/namespaces/serving-default/endpoints/your-llm-endpoint/v1",
+    "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+  },
+  "api_key": "your-api-key-here"
+}
+
