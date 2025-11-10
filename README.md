@@ -245,14 +245,14 @@ Here are examples of the Cursor agent window in action with Cloudera LLM:
 ```json
 {
   "endpoint": {
-    "base_url": "https://ml-64288d82-5dd.go01-dem.ylcu-atmi.cloudera.site/namespaces/serving-default/endpoints/goes---e5-embedding/v1"
+    "base_url": "https://your-endpoint.com/namespaces/serving-default/endpoints/your-embedding-endpoint/v1"
   },
   "models": {
     "query_model": "nvidia/nv-embedqa-e5-v5-query",
     "passage_model": "nvidia/nv-embedqa-e5-v5-passage"
   },
   "llm_endpoint": {
-    "base_url": "https://ml-64288d82-5dd.go01-dem.ylcu-atmi.cloudera.site/namespaces/serving-default/endpoints/goes---nemotron-49b-throughput-l40s/v1",
+    "base_url": "https://your-endpoint.com/namespaces/serving-default/endpoints/your-llm-endpoint/v1",
     "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
   },
   "api_key": "your-api-key-here",
@@ -265,7 +265,7 @@ Here are examples of the Cursor agent window in action with Cloudera LLM:
 ```json
 {
   "llm_endpoint": {
-    "base_url": "https://ml-64288d82-5dd.go01-dem.ylcu-atmi.cloudera.site/namespaces/serving-default/endpoints/goes---nemotron-49b-throughput-l40s/v1",
+    "base_url": "https://your-endpoint.com/namespaces/serving-default/endpoints/your-llm-endpoint/v1",
     "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
   },
   "api_key": "your-api-key-here"
