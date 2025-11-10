@@ -122,11 +122,28 @@ If you see `✅ Configuration OK!`, your configuration is correct!
 
 **To use Cloudera LLM in Cursor's agent window:**
 
+**Option 1: Generate workspace file automatically (Recommended)**
+
 ```bash
 # 1. Generate workspace file with Cloudera settings
 python3 scripts/create_cursor_workspace.py
 
 # 2. Open workspace in Cursor
+# File → Open Workspace from File... → ModelTesting.code-workspace
+# Or double-click ModelTesting.code-workspace
+```
+
+**Option 2: Copy example workspace file manually**
+
+```bash
+# 1. Copy example workspace file
+cp ModelTesting.code-workspace.example ModelTesting.code-workspace
+
+# 2. Edit ModelTesting.code-workspace with your Cloudera endpoint details
+# Replace YOUR_API_KEY_HERE with your actual API key
+# Replace your-cloudera-endpoint.com/namespaces/serving-default/endpoints/your-endpoint-name/v1 with your actual endpoint URL
+
+# 3. Open workspace in Cursor
 # File → Open Workspace from File... → ModelTesting.code-workspace
 # Or double-click ModelTesting.code-workspace
 ```
@@ -176,8 +193,9 @@ Here are examples of the Cursor agent window in action with Cloudera LLM:
 - [ ] Python 3.8+ installed
 - [ ] Virtual environment created and activated
 - [ ] Dependencies installed (`pip install -r requirements.txt`)
-- [ ] `config.json` created and configured (for embeddings)
-- [ ] `config-llm.json` created and configured (for LLM/agent window)
+- [ ] `config.json` created from `config.json.example` and configured (for embeddings)
+- [ ] `config-llm.json` created from `config-llm.json.example` and configured (for LLM/agent window)
+- [ ] `ModelTesting.code-workspace` created from `ModelTesting.code-workspace.example` and configured (if using agent window)
 - [ ] Configuration test passes
 - [ ] Cursor workspace configured (if using agent window)
 - [ ] Examples run successfully
